@@ -47,7 +47,7 @@ class Form(StatesGroup):
 def get_sub_keyboard(script_id: str):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Канал 1", url=CHANNEL_1_LINK)],
-        [InlineKeyboardButton(text="Канал 2", url=,CHANNEL_2_LINK)],
+        [InlineKeyboardButton(text="Канал 2", url=CHANNEL_2_LINK)],
         [InlineKeyboardButton(text="Я подписался", callback_data=f"check_{script_id}")]
     ])
 
