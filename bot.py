@@ -8,35 +8,36 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 # === НАСТРОЙКИ ===
 BOT_TOKEN = "8476199583:AAGIObszhz_ucZvAxlA25NW9f68d-ItUc4g" 
-CHANNEL_1_LINK = "https://t.me/Xleb4ikScript"
-CHANNEL_2_LINK = "https://t.me/Sigma4Script"
-CHANNEL_1_USERNAME = "@Xleb4ikScript"
-CHANNEL_2_USERNAME = "@Sigma4Script"
+CHANNEL_1_LINK = "https://t.me/Sigma4Script"
+CHANNEL_2_LINK = "https://t.me/Xleb4ikScript2"
+CHANNEL_1_USERNAME = "@Sigma4Script"
+CHANNEL_2_USERNAME = "@Xleb4ikScript22"
+TUTORIAL_LINK = "https://youtu.be/-SNisYqzKx4?si=tLw5kmmM9m_q8o4J"  
 
 # === СКРИПТЫ ПО ID ===
 SCRIPTS = {
-    "sfd34x!s": """
+    "1": """
 loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
     """.strip(),
-    "gbgfbu": """
+    "2": """
 loadstring(game:HttpGet("https://raw.githubusercontent.com/adibhub1/99-nighit-in-forest/refs/heads/main/99 night in forest"))()
     """.strip(),
-    "safmxc": """
+    "3": """
 loadstring(game:HttpGet("https://raw.githubusercontent.com/m00ndiety/99-nights-in-the-forest/refs/heads/main/Main"))()
     """.strip(),
-    "iarfji34d": """
+    "4": """
 loadstring(game:HttpGet("https://raw.githubusercontent.com/GEC0/gec/refs/heads/main/Gec.Loader"))()
     """.strip(),
-    "234ndulDSF": """
+    "5": """
 loadstring(game:HttpGet("https://raw.githubusercontent.com/collonroger/pigeonhub/refs/heads/main/autofarmdiamonds.lua"))()
     """.strip(),
-    "qwAsLk2": """
+    "6": """
 loadstring(game:HttpGet("https://raw.githubusercontent.com/yoursvexyyy/VEX-OP/refs/heads/main/99 nights in the forest"))()
     """.strip()
 }
 
 # === ИЗОБРАЖЕНИЕ ===
-IMAGE_URL = "https://polinka.top/pics2/uploads/posts/2024-01/1706579927_polinka-top-p-gigachad-risunok-vkontakte-1.jpg"  
+IMAGE_URL = "https://ih1.redbubble.net/image.5506461112.7176/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" 
 
 # === СОСТОЯНИЯ ===
 class Form(StatesGroup):
@@ -46,13 +47,20 @@ class Form(StatesGroup):
 def get_sub_keyboard(script_id: str):
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Канал 1", url=CHANNEL_1_LINK)],
-        [InlineKeyboardButton(text="Канал 2", url=CHANNEL_2_LINK)],
+        [InlineKeyboardButton(text="Канал 2", url=,CHANNEL_2_LINK)],
         [InlineKeyboardButton(text="Я подписался", callback_data=f"check_{script_id}")]
     ])
 
 # === БОТ ===
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
+
+# === ПРЕДСТАРТОВЫЙ ТЕКСТ ===
+WELCOME_TEXT = (
+    "*Приветствую в scriptmajproRB_bot!*\n\n"
+    "Данный бот создан для **получения ключа и скрипта**\n\n"
+    f"Туториал как получить ключ вы можете [перейти по ссылке]({TUTORIAL_LINK})"
+)
 
 # === ПРОВЕРКА ПОДПИСКИ ===
 async def is_subscribed(user_id: int) -> bool:
@@ -64,14 +72,20 @@ async def is_subscribed(user_id: int) -> bool:
     except:
         return False
 
-# === /start id ===
+# === /start (только по ID) ===
 @dp.message(Command("start"))
 async def start_cmd(message: types.Message, state: FSMContext):
-    args = message.text.split()
+    args = message.text.split(maxsplit=1)
     script_id = args[1] if len(args) > 1 else None
 
     if not script_id or script_id not in SCRIPTS:
-        await message.answer("ошибка")
+        await bot.send_photo(
+            chat_id=message.chat.id,
+            photo=IMAGE_URL,
+            caption=WELCOME_TEXT,
+            parse_mode="Markdown",
+            disable_web_page_preview=True
+        )
         return
 
     text = (
@@ -118,6 +132,7 @@ async def send_script(callback: types.CallbackQuery, state: FSMContext):
 
 # === ЗАПУСК ===
 async def main():
+    print("scriptmajproRB_bot запущен")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
